@@ -13,13 +13,8 @@ part of 'auth_repository_provider.dart';
 final authRepositoryProvider = AuthRepositoryProvider._();
 
 final class AuthRepositoryProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<AuthRepository>,
-          AuthRepository,
-          FutureOr<AuthRepository>
-        >
-    with $FutureModifier<AuthRepository>, $FutureProvider<AuthRepository> {
+    extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository>
+    with $Provider<AuthRepository> {
   AuthRepositoryProvider._()
     : super(
         from: null,
@@ -36,14 +31,21 @@ final class AuthRepositoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<AuthRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  $ProviderElement<AuthRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  FutureOr<AuthRepository> create(Ref ref) {
+  AuthRepository create(Ref ref) {
     return authRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthRepository>(value),
+    );
   }
 }
 
-String _$authRepositoryHash() => r'9dae54afee52964dbfa796ba234812680339d0d7';
+String _$authRepositoryHash() => r'dfd4b69395cbda1362eade80a6d95472043dc96f';

@@ -5,7 +5,7 @@ import 'package:samriddhi_algo_trade_app/features/auth/providers/auth_api_servic
 part 'auth_repository_provider.g.dart';
 
 @riverpod
-Future<AuthRepository> authRepository(Ref ref) async {
+AuthRepository authRepository(Ref ref) {
   final apiService = ref.watch(authApiServiceProvider);
   final storage = ref.watch(authStorageProvider);
   return AuthRepository(apiService: apiService, storage: storage);

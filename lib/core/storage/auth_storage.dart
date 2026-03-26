@@ -36,28 +36,27 @@ class AuthStorage {
     required List<BrokerModel> allBroker,
     required int userBrokerId,
   }) async {
-    await _storage.write(key: _keyAccessToken, value: accessToken);
-    await _storage.write(key: _keyUserId, value: userId);
-    await _storage.write(key: _keyUserName, value: userName);
-    await _storage.write(key: _keyEmail, value: email);
-    await _storage.write(key: _keyPhone, value: phone);
-    await _storage.write(key: _keyCreatedDate, value: createdDate);
-    await _storage.write(key: _keyIsActive, value: isActive.toString());
-    await _storage.write(key: _keyIsUserPause, value: isUserPause.toString());
-    await _storage.write(key: _keyApiId, value: apiId.toString());
-    await _storage.write(
-      key: _keyStrategyLimits,
-      value: strategyLimits.toString(),
-    );
-    await _storage.write(
-      key: _keyAllBroker,
-      value: jsonEncode(allBroker.map((b) => b.toJson()).toList()),
-    );
-    await _storage.write(key: _keyUserBrokerId, value: userBrokerId.toString());
-    await _storage.write(
-      key: _keyLoginTime,
-      value: DateTime.now().toIso8601String(),
-    );
+    Future.wait([
+      _storage.write(key: _keyAccessToken, value: accessToken),
+      _storage.write(key: _keyUserId, value: userId),
+      _storage.write(key: _keyUserName, value: userName),
+      _storage.write(key: _keyEmail, value: email),
+      _storage.write(key: _keyPhone, value: phone),
+      _storage.write(key: _keyCreatedDate, value: createdDate),
+      _storage.write(key: _keyIsActive, value: isActive.toString()),
+      _storage.write(key: _keyIsUserPause, value: isUserPause.toString()),
+      _storage.write(key: _keyApiId, value: apiId.toString()),
+      _storage.write(key: _keyStrategyLimits, value: strategyLimits.toString()),
+      _storage.write(
+        key: _keyAllBroker,
+        value: jsonEncode(allBroker.map((b) => b.toJson()).toList()),
+      ),
+      _storage.write(key: _keyUserBrokerId, value: userBrokerId.toString()),
+      _storage.write(
+        key: _keyLoginTime,
+        value: DateTime.now().toIso8601String(),
+      ),
+    ]);
   }
 
   Future<String?> getAccessToken() => _storage.read(key: _keyAccessToken);
@@ -70,10 +69,10 @@ class AuthStorage {
     final email = await _storage.read(key: _keyEmail);
     final phone = await _storage.read(key: _keyPhone);
     final createdDate = await _storage.read(key: _keyCreatedDate);
-    final isActive = await _storage.read(key: _keyCreatedDate);
-    final isUserPause = await _storage.read(key: _keyCreatedDate);
-    final apiId = await _storage.read(key: _keyCreatedDate);
-    final strategyLimits = await _storage.read(key: _keyCreatedDate);
+    final isActive = await _storage.read(key: _keyIsActive);
+    final isUserPause = await _storage.read(key: _keyIsUserPause);
+    final apiId = await _storage.read(key: _keyApiId);
+    final strategyLimits = await _storage.read(key: _keyStrategyLimits);
     if (userId == null || name == null) return null;
 
     return UserModel(

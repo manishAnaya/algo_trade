@@ -7,7 +7,7 @@ import '../../../core/models/auth_response_model.dart';
 import 'auth_state.dart';
 part 'auth_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthNotifier extends _$AuthNotifier {
   late AuthRepository _repository;
 
@@ -15,7 +15,7 @@ class AuthNotifier extends _$AuthNotifier {
 
   @override
   Future<AuthState> build() async {
-    _repository = await ref.watch(authRepositoryProvider.future);
+    _repository = ref.watch(authRepositoryProvider);
 
     final savedUser = await _repository.getSavedUser();
     final isLoggedIn = savedUser != null;
@@ -37,8 +37,7 @@ class AuthNotifier extends _$AuthNotifier {
       final response = await _repository.getOtp(phoneNo);
       _authResponse = response;
       GlobalVariable.serverOtp = response.user.otp!.toString();
-
-      state = AsyncData(current.copyWith(isLoading: false));
+      state = AsyncData(current.copyWith());
       return true;
     } on AuthException catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
@@ -47,9 +46,10 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   Future<bool> verifyOtp({required String enteredOtp}) async {
+    if (_authResponse == null) return false;
     final current = state.asData?.value ?? AuthState.initial();
     state = const AsyncLoading();
-    if (_authResponse == null) return false;
+
     try {
       final serverOtp = _authResponse!.user.otp?.toString();
 
@@ -87,9 +87,9 @@ class AuthNotifier extends _$AuthNotifier {
     required String email,
     required String phone,
   }) async {
+    final current = state.asData?.value ?? AuthState.initial();
     state = const AsyncLoading();
     try {
-      final current = state.asData?.value ?? AuthState.initial();
       final response = await _repository.registerUser(
         name: name,
         email: email,
@@ -97,7 +97,7 @@ class AuthNotifier extends _$AuthNotifier {
       );
       _authResponse = response;
 
-      state = AsyncData(current.copyWith(isLoading: false));
+      state = AsyncData(current.copyWith());
       return true;
     } on AuthException catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);

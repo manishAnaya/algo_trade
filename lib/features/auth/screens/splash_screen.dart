@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:samriddhi_algo_trade_app/core/constants/app_images.dart';
+import 'package:samriddhi_algo_trade_app/features/auth/providers/auth_notifier.dart';
 import '../../../core/routes/app_routes.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   late final Animation<double> _animation;
@@ -34,8 +36,16 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
-  void _navigate() {
-    context.go(AppRoutes.onboarding);
+  void _navigate() async {
+    final authState = await ref.read(authProvider.future);
+    if (!mounted) return;
+    if (authState.isLoggedIn) {
+      context.go(AppRoutes.home);
+    } else if (authState.isOnboarded) {
+      context.go(AppRoutes.login);
+    } else {
+      context.go(AppRoutes.onboarding);
+    }
   }
 
   @override

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:samriddhi_algo_trade_app/core/models/broker_model.dart';
 import 'package:samriddhi_algo_trade_app/features/auth/providers/auth_notifier.dart';
-import 'package:samriddhi_algo_trade_app/features/auth/providers/auth_selectors.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/themes/app_colors.dart';
 import 'widgets/status_badge.dart';
@@ -13,8 +13,16 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
-    final broker = ref.watch(currentBrokerProvider);
+    final authState = ref.watch(authProvider);
+    final user = authState.asData?.value.user;
+    final brokerId = authState.asData?.value.userBrokerId;
+    final allBrokers = authState.asData?.value.allBroker;
+    final BrokerModel? broker = (allBrokers != null && brokerId != null)
+        ? allBrokers.firstWhere(
+            (b) => b.brokerId == brokerId,
+            orElse: () => allBrokers.first,
+          )
+        : null;
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: SingleChildScrollView(

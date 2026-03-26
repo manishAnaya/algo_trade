@@ -19,8 +19,7 @@ class AuthState {
   AuthState copyWith({
     bool? isLoggedIn,
     bool? isOnboarded,
-    bool? isLoading,
-    String? error,
+
     UserModel? user,
     List<BrokerModel>? allBroker,
     int? userBrokerId,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:samriddhi_algo_trade_app/core/constants/api_constants.dart';
 import 'package:samriddhi_algo_trade_app/core/models/auth_response_model.dart';
@@ -35,6 +36,8 @@ class AuthApiService {
       );
     } on AuthException {
       rethrow;
+    } on SocketException {
+      throw AuthException.network();
     } catch (e) {
       throw AuthException.serverError();
     }
@@ -64,6 +67,8 @@ class AuthApiService {
       );
     } on AuthException {
       rethrow;
+    } on SocketException {
+      throw AuthException.network();
     } catch (e) {
       throw AuthException.serverError();
     }

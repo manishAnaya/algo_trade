@@ -5,6 +5,7 @@ import 'package:samriddhi_algo_trade_app/features/auth/screens/otp_screen.dart';
 import 'package:samriddhi_algo_trade_app/features/auth/screens/signup_screen.dart';
 import 'package:samriddhi_algo_trade_app/features/auth/screens/splash_screen.dart';
 import 'package:samriddhi_algo_trade_app/features/dashboard/home_shell.dart';
+import 'package:samriddhi_algo_trade_app/features/profile/connect_broker_screen.dart';
 import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/portfolio/portfolio_screen.dart';
 import '../../features/profile/profile_screen.dart';
@@ -42,6 +43,10 @@ final route = GoRouter(
     GoRoute(
       path: AppRoutes.signup,
       builder: (context, state) => SignupScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.brokerConnect,
+      builder: (context, state) => BrokerConnectScreen(),
     ),
     GoRoute(
       path: AppRoutes.otp,
